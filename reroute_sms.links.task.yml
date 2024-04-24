@@ -1,0 +1,9 @@
+reroute_sms.settings:
+  route_name: reroute_sms.settings
+  title: Settings
+  weight: -10
+  base_route: reroute_sms.settings
+reroute_sms.test_sms_form:
+  route_name: reroute_sms.test_sms_form
+  title: 'Test SMS form'
+  base_route: reroute_sms.settings

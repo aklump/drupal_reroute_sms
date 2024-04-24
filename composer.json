@@ -1,0 +1,5 @@
+{
+    "name": "aklump_drupal/reroute_sms",
+    "description": "Reroutes SMS texts sent from the site to a predefined phone number. Useful for test sites.",
+    "license": "GPL-2.0-or-later"
+}

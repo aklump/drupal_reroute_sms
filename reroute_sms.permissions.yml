@@ -1,0 +1,4 @@
+'administer reroute sms':
+  title: 'Administer Reroute SMS'
+  description: 'Administer the Reroute SMS module.'
+  restrict access: true

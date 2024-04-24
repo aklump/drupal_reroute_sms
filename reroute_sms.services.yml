@@ -1,0 +1,4 @@
+services:
+  reroute_sms.event_subscriber:
+    class: \Drupal\reroute_sms\EventSubscriber\RerouteSmsEventSubscriber
+    tags: [{ name: event_subscriber }]

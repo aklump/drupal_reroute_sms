@@ -1,0 +1,35 @@
+<?php
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+/**
+ * @file
+ * Intercepts all outgoing SMS to be rerouted to a configurable number.
+ */
+
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\reroute_sms\Component\Utility\FormatPhoneNumber;
+use Drupal\reroute_sms\Constants\RerouteSMSConstants;
+
+/**
+ * Split a string into an array by pre defined allowed delimiters.
+ *
+ * Items may be separated by any number and combination of:
+ * spaces, commas, semicolons, or newlines.
+ *
+ * @param string|null $string
+ *   A string to be split into an array.
+ *
+ * @return array
+ *   An array of unique values from a string.
+ */
+function reroute_sms_split_string(?string $string): array {
+  $numbers = [];
+  if (!empty($string)) {
+    $numbers = preg_split('/[\s,;\n]+/', $string ?? '', -1, PREG_SPLIT_NO_EMPTY);
+  }
+  $numbers = array_unique($numbers);
+
+  return array_map(function ($number) {
+    return (new FormatPhoneNumber())($number, FormatPhoneNumber::SMS_FORMAT);
+  }, $numbers);
+}

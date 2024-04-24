@@ -1,0 +1,5 @@
+reroute_sms.settings:
+  route_name: reroute_sms.settings
+  title: 'Reroute SMS'
+  description: 'Reroute SMS to a test phone_number.'
+  parent: system.admin_config_development

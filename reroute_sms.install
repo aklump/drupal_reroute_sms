@@ -1,0 +1,41 @@
+<?php
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+/**
+ * @file
+ * Reroute SMS installation and upgrade tasks.
+ */
+
+use Drupal\Core\Link;
+use Drupal\reroute_sms\Constants\RerouteSMSConstants;
+
+/**
+ * Implements hook_requirements().
+ */
+function reroute_sms_requirements($phase) {
+  $requirements = [];
+  $reroute_config = Drupal::config('reroute_sms.settings');
+
+  if ($phase === 'runtime' && $reroute_config->get(RerouteSMSConstants::REROUTE_SMS_ENABLE)) {
+    $settings = [
+      '@link' => Link::createFromRoute(t('configure allow list'), 'reroute_sms.settings')
+        ->toString(),
+      '%numbers' => $reroute_config->get(RerouteSMSConstants::REROUTE_SMS_PHONE_NUMBER) ?? '',
+    ];
+
+    if (empty($settings['%numbers'])) {
+      $message = t('All outgoing SMS (@link) would be aborted and recorded in the recent log entries (if enabled).', $settings);
+    }
+    else {
+      $message = t('All outgoing SMS (@link) would be rerouted to: %numbers', $settings);
+    }
+
+    $requirements['reroute_sms'] = [
+      'title' => t('Reroute SMS'),
+      'value' => $message,
+      'severity' => REQUIREMENT_WARNING,
+    ];
+  }
+
+  return $requirements;
+}

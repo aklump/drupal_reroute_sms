@@ -1,0 +1,9 @@
+name: 'Reroute SMS'
+description: 'Reroutes SMS texts sent from the site to a predefined phone number. Useful for test sites.'
+package: Development
+core_version_requirement: '^9.4 || ^10'
+configure: reroute_sms.settings
+type: module
+dependencies:
+    - 'drupal:sms'
+version: 0.0.0

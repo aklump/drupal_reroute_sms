@@ -1,0 +1,14 @@
+reroute_sms.settings:
+  type: config_object
+  label: 'Reroute SMS Settings.'
+  mapping:
+    enable:
+      type: boolean
+      label: 'Enable rerouting.'
+    phone_number:
+      type: string
+      label: 'Rerouting phone numbers.'
+    message:
+      type: boolean
+      label: 'Display a Drupal status message after rerouting.'
+

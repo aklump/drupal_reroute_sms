@@ -1,0 +1,14 @@
+reroute_sms.settings:
+  path: /admin/config/development/reroute_sms
+  defaults:
+    _title: 'Reroute SMS'
+    _form: \Drupal\reroute_sms\Form\SettingsForm
+  requirements:
+    _permission: 'administer reroute sms'
+reroute_sms.test_sms_form:
+  path: /admin/config/development/reroute_sms/test
+  defaults:
+    _title: 'Test SMS form'
+    _form: \Drupal\reroute_sms\Form\TestSMSForm
+  requirements:
+    _permission: 'administer reroute sms'
