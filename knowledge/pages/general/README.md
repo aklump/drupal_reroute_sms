@@ -9,11 +9,6 @@ This is a copy of [Reroute Email](https://www.drupal.org/project/reroute_email) 
 
 {{ composer.install|raw }}
 
-* composer require {{ composer.require }}
-* {{ package.name }}
-* {{ package.version }}
-* {{ package.url }}
-
 ## TIPS AND TRICKS
 
 1.  Reroute SMS provides configuration variables that can be directly overridden in the settings.php file of a site. This is particularly useful for moving sites from live to test and vice versa.
