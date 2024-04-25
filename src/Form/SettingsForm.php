@@ -226,7 +226,7 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $this->configFactory->get('reroute_sms.settings')
+    $this->configFactory->getEditable('reroute_sms.settings')
       ->set(RerouteSMSConstants::REROUTE_SMS_ENABLE, $form_state->getValue(RerouteSMSConstants::REROUTE_SMS_ENABLE))
       ->set(RerouteSMSConstants::REROUTE_SMS_PHONE_NUMBER, $form_state->getValue(RerouteSMSConstants::REROUTE_SMS_PHONE_NUMBER))
       ->set(RerouteSMSConstants::REROUTE_SMS_MESSAGE, $form_state->getValue(RerouteSMSConstants::REROUTE_SMS_MESSAGE))
