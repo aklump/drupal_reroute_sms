@@ -13,7 +13,12 @@ This is a copy of [Reroute Email](https://www.drupal.org/project/reroute_email) 
     }
     ```
 
-1. Then `composer require aklump_drupal/reroute_sms:^0.0`
+1. Require this package:
+
+    ```
+    composer require aklump_drupal/reroute_sms:^0.0
+    ```
+    
 1. It will be installed to _web/modules/custom/reroute_sms_, which should be excluded from source control.
 
 ## TIPS AND TRICKS
