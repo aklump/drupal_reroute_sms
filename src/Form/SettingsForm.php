@@ -110,7 +110,6 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
     ModuleExtensionList $extension_list_module
   ) {
     parent::__construct($config_factory);
-    $this->rerouteConfig = $this->config('reroute_sms.settings');
     $this->moduleHandler = $module_handler;
     $this->roleStorage = $role_storage;
     $this->phoneValidator = $phone_validator;
@@ -121,10 +120,11 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
+    $config = $this->configFactory->get('reroute_sms.settings');
     $form[RerouteSMSConstants::REROUTE_SMS_ENABLE] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable rerouting'),
-      '#default_value' => $this->rerouteConfig->get(RerouteSMSConstants::REROUTE_SMS_ENABLE),
+      '#default_value' => $config->get(RerouteSMSConstants::REROUTE_SMS_ENABLE),
       '#description' => $this->t('Check this box if you want to enable sms rerouting. Uncheck to disable rerouting.'),
       '#config' => [
         'key' => 'reroute_sms.settings:' . RerouteSMSConstants::REROUTE_SMS_ENABLE,
@@ -135,7 +135,7 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
       'visible' => [':input[name=' . RerouteSMSConstants::REROUTE_SMS_ENABLE . ']' => ['checked' => TRUE]],
     ];
 
-    $default_address = $this->rerouteConfig->get(RerouteSMSConstants::REROUTE_SMS_PHONE_NUMBER);
+    $default_address = $config->get(RerouteSMSConstants::REROUTE_SMS_PHONE_NUMBER);
     if (NULL === $default_address) {
       $default_address = $this->config('system.site')->get('mail');
     }
@@ -161,7 +161,7 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
     $form[RerouteSMSConstants::REROUTE_SMS_MESSAGE] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display a Drupal status message after rerouting'),
-      '#default_value' => $this->rerouteConfig->get(RerouteSMSConstants::REROUTE_SMS_MESSAGE),
+      '#default_value' => $config->get(RerouteSMSConstants::REROUTE_SMS_MESSAGE),
       '#description' => $this->t('Check this box if you would like a Drupal status message to be displayed to users after submitting an SMS to let them know it was aborted to send or rerouted to a different phone number.'),
       '#states' => $states,
       '#config' => [
@@ -226,7 +226,8 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $this->rerouteConfig->set(RerouteSMSConstants::REROUTE_SMS_ENABLE, $form_state->getValue(RerouteSMSConstants::REROUTE_SMS_ENABLE))
+    $this->configFactory->get('reroute_sms.settings')
+      ->set(RerouteSMSConstants::REROUTE_SMS_ENABLE, $form_state->getValue(RerouteSMSConstants::REROUTE_SMS_ENABLE))
       ->set(RerouteSMSConstants::REROUTE_SMS_PHONE_NUMBER, $form_state->getValue(RerouteSMSConstants::REROUTE_SMS_PHONE_NUMBER))
       ->set(RerouteSMSConstants::REROUTE_SMS_MESSAGE, $form_state->getValue(RerouteSMSConstants::REROUTE_SMS_MESSAGE))
       ->save();
