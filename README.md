@@ -4,33 +4,42 @@ This is a copy of [Reroute Email](https://www.drupal.org/project/reroute_email) 
 
 ## Install with Composer
 
-1. Because this is an unpublished package, you must define it's repository in your project's _composer.json_ file. Add the following to _composer.json_ in the `repositories` array:
-
+1. Because this is an unpublished package, you must define it's repository in
+   your project's _composer.json_ file. Add the following to _composer.json_ in
+   the `repositories` array:
+   
     ```json
     {
-        "type": "github",
-        "url": "https://github.com/aklump/drupal_reroute_sms"
+     "type": "github",
+     "url": "https://github.com/aklump/drupal_reroute_sms"
     }
     ```
-
 1. Require this package:
-
+   
     ```
     composer require aklump_drupal/reroute_sms:^0.0
     ```
-    
-1. It will be installed to _web/modules/custom/reroute_sms_, which should be excluded from source control.
+1. Add the installed directory to _.gitignore_
+   
+   ```php
+   /web/modules/custom/reroute_sms/
+   ```
 
 ## TIPS AND TRICKS
 
-1.  Reroute SMS provides configuration variables that can be directly overridden in the settings.php file of a site. This is particularly useful for moving sites from live to test and vice versa.
+1. Reroute SMS provides configuration variables that can be directly overridden in the settings.php file of a site. This is particularly useful for moving sites from live to test and vice versa.
 
-2.  An example of setup would be to enable rerouting on a test environment, while making sure it is disabled in production.
+2. An example of setup would be to enable rerouting on a test environment, while making sure it is disabled in production.
+
+_Test Environement > settings.php_
+
+```php
+$config['reroute_sms.settings']['enable'] = TRUE;
+$config['reroute_sms.settings']['phone_number'] = '+13605551212';
 ```
-     Add the following line in the settings.php file for the test environment:
-       $config['reroute_sms.settings']['enable'] = TRUE;
-       $config['reroute_sms.settings']['phone_number'] = '+13605551212';
 
-     And for the live site, set it as follows:
-       $config['reroute_sms.settings']['enable'] = FALSE;
+_Live Environement > settings.php_
+
+```php
+$config['reroute_sms.settings']['enable'] = FALSE;
 ```

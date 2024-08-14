@@ -6,9 +6,9 @@
  * Intercepts all outgoing SMS to be rerouted to a configurable number.
  */
 
+use AKlump\PhoneNumber\PhoneNumberFormats;
+use AKlump\PhoneNumber\USPhoneNumberFormatter;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\reroute_sms\Component\Utility\FormatPhoneNumber;
-use Drupal\reroute_sms\Constants\RerouteSMSConstants;
 
 /**
  * Split a string into an array by pre defined allowed delimiters.
@@ -28,8 +28,13 @@ function reroute_sms_split_string(?string $string): array {
     $numbers = preg_split('/[\s,;\n]+/', $string ?? '', -1, PREG_SPLIT_NO_EMPTY);
   }
   $numbers = array_unique($numbers);
+  $formatter = new USPhoneNumberFormatter(PhoneNumberFormats::SMS);
 
-  return array_map(function ($number) {
-    return (new FormatPhoneNumber())($number, FormatPhoneNumber::SMS_FORMAT);
+  return array_map(function ($number) use ($formatter) {
+    if ($formatter->isValid($number)) {
+      return $formatter->format($number);
+    }
+
+    return $number;
   }, $numbers);
 }

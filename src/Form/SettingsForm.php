@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 namespace Drupal\reroute_sms\Form;
 
-use Drupal\Component\Utility\PhoneValidatorInterface;
-use Drupal\reroute_sms\Component\Utility\PhoneValidator;
+use AKlump\PhoneNumber\PhoneNumberFormats;
+use AKlump\PhoneNumber\USPhoneNumberFormatter;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -41,18 +41,16 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
   protected $roleStorage;
 
   /**
-   * The phone number validator.
-   *
-   * @var \Drupal\Component\Utility\PhoneValidatorInterface
-   */
-  protected $phoneValidator;
-
-  /**
    * The module extension list.
    *
    * @var \Drupal\Core\Extension\ModuleExtensionList
    */
   protected $moduleExtensionList;
+
+  /**
+   * @var \AKlump\PhoneNumber\USPhoneNumberFormatter
+   */
+  private $smsPhoneNumberFormatter;
 
   /**
    * {@inheritdoc}
@@ -83,7 +81,6 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
       $container->get('config.factory'),
       $container->get('module_handler'),
       $container->get('entity_type.manager')->getStorage('user_role'),
-      new PhoneValidator(),
       $container->get('extension.list.module')
     );
   }
@@ -97,8 +94,6 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
    *   The module handler service.
    * @param \Drupal\user\RoleStorageInterface $role_storage
    *   The role storage.
-   * @param \Drupal\reroute_sms\Component\Utility\PhoneValidatorInterface $phone_validator
-   *   The phone number validator.
    * @param \Drupal\Core\Extension\ModuleExtensionList $extension_list_module
    *   The module extension list.
    */
@@ -106,13 +101,12 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
     ConfigFactoryInterface $config_factory,
     ModuleHandlerInterface $module_handler,
     RoleStorageInterface $role_storage,
-    \Drupal\reroute_sms\Component\Utility\PhoneValidatorInterface $phone_validator,
     ModuleExtensionList $extension_list_module
   ) {
     parent::__construct($config_factory);
+    $this->smsPhoneNumberFormatter = new USPhoneNumberFormatter( PhoneNumberFormats::SMS);
     $this->moduleHandler = $module_handler;
     $this->roleStorage = $role_storage;
-    $this->phoneValidator = $phone_validator;
     $this->moduleExtensionList = $extension_list_module;
   }
 
@@ -202,8 +196,13 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
     // Allow only valid phone numbers.
     $numbers = reroute_sms_split_string($form_state->getValue($element['#name']));
     foreach ($numbers as $number) {
-      if (!$this->phoneValidator->isValid($number)) {
-        $form_state->setErrorByName($element['#name'], $this->t('@phone_number is not a valid phone number.', ['@phone_number' => $number]));
+      $violations = $this->smsPhoneNumberFormatter->validate($number);
+      if ($violations) {
+        $violations = array_map(function ($violation) {
+          return $violation->getMessage();
+        }, $violations);
+        array_unshift($violations, $this->t('@phone_number is not a valid phone number.', ['@phone_number' => $number]));
+        $form_state->setErrorByName($element['#name'], implode(' ', $violations));
       }
     }
   }

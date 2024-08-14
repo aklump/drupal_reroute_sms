@@ -2,5 +2,8 @@
     "type": "drupal-custom-module",
     "name": "aklump_drupal/reroute_sms",
     "description": "Reroutes SMS texts sent from the site to a predefined phone number. Useful for test sites.",
-    "license": "GPL-2.0-or-later"
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "aklump/phone-number": "^0.0"
+    }
 }
