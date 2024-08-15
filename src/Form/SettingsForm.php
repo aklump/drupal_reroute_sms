@@ -139,7 +139,7 @@ class SettingsForm extends ConfigFormBase implements TrustedCallbackInterface {
       '#rows' => 2,
       '#title' => $this->t('Rerouting phone numbers'),
       '#default_value' => $default_address,
-      '#description' => $this->t('Provide a comma-delimited list of phone numbers. Every destination phone number will be rerouted to these addresses.<br/>If this field is empty and no value is provided, all outgoing SMS texts would be aborted and the SMS would be recorded in the recent log entries (if enabled).'),
+      '#description' => $this->t('Provide a comma-delimited list of phone numbers or one per line. Every destination phone number will be rerouted to these addresses.<br/>If this field is empty and no value is provided, all outgoing SMS texts would be aborted and the SMS would be recorded in the recent log entries (if enabled).'),
       '#element_validate' => [
         [$this, 'validateMultiplePhoneNumbers'],
         [$this, 'validateMultipleUnique'],
