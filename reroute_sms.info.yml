@@ -6,4 +6,4 @@ configure: reroute_sms.settings
 type: module
 dependencies:
     - 'drupal:sms'
-version: 0.0.7
+version: 0.0.8
